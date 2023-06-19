@@ -1,0 +1,186 @@
+drop database project;
+create database project;
+use project;
+
+
+create table organizers 
+(
+  id int primary key auto_increment,
+  name varchar(50),
+  city varchar(50),
+  email varchar(100) unique not null
+);
+
+
+insert into organizers(name,city,email)
+values('Ratan Tata','Mumbai','ratantata@gmail.com'),
+('Gautam Adani','Surat','gautamadani@gmail.com'),
+('Mukesh Ambani','Mumbai','mukeshambani@gmail.com'),
+('Harsh Jain','Delhi','harshjain@gmail.com');
+
+
+create table stadiums 
+(
+  id int primary key auto_increment,
+  name varchar(50),
+  city varchar(50),
+  capacity int
+);
+
+
+insert into stadiums(name,city,capacity)
+values('MCA','Pune',50000),
+('Wankhede','Mumbai',70000),
+('DY Patil','Navi Mumbai',80000),
+('Narendra Modi','Ahmedabad',90000),
+('Rajiv Gandhi','Hyderabad',60000);
+
+
+create table teams 
+(
+  id int primary key auto_increment,
+  name varchar(50) unique not null,
+  coach_name varchar(50),
+  city varchar(50)
+);
+
+insert into teams(name,coach_name,city)
+values('Mumbai City FC','Des Buckingham','Mumbai'),
+('Kerala Blasters FC','Ivan Vukomanvoic','Kerala'),
+('FC Goa','Carlos Pena','Goa'),
+('Bengaluru FC','Simon Grayson','Bengalore'),
+('Chennaiyin FC','Thomas Brdaric','Chennai');
+
+
+create table tournaments 
+(
+  id int primary key auto_increment,
+  name varchar(50) not null,
+  start_date date,
+  end_date date,
+  organizer_id int,
+  constraint fk_oid foreign key (organizer_id) references organizers(id)
+);
+
+
+insert into tournaments(name,start_date,end_date,organizer_id)
+values('Indian Super League','2022-03-17','2022-04-07',1),
+('Durand Cup','2022-06-17','2022-07-07',2),
+('Santosh Trophy','2022-09-17','2022-10-07',3),
+('Indian Super Cup','2023-03-17','2023-04-07',4);
+
+
+create table players 
+(
+  id int primary key auto_increment,
+  name varchar(100),
+  birthdate date,
+  nationality varchar(50),
+  team_id int,
+  constraint fk_ptid foreign key (team_id) references teams(id)
+);
+
+
+
+insert into players(name,birthdate,nationality,team_id)
+values('Sunil Chhetri','1988-04-15','India',1),
+('Gurpreet Singh','1985-06-12','India',1),
+('Arshdeep Singh','1982-01-20','India',1),
+('Dheeraj Moirangthem','1984-09-10','Germany',1),
+('Hritik Tiwari','1981-11-25','India',1),
+('Anwar Ali','1983-02-19','India',1),
+('Lesly Rebello','1986-04-24','Australia',1),
+('Nikhil Prabhu','1987-08-07','India',1),
+('Sanson Pereira','1982-01-18','Argentina',1),
+('Saviour Gama','1981-11-27','Brazil',1),
+('Ayush Dev','1985-07-25','Indian',1),
+
+('Leonel Messi','1988-06-11','Germany',2),
+('David Silva','1981-05-03','Sweden',2),
+('Marco Reus','1985-01-12','Spain',2),
+('Frank Ribery','1979-06-02','Germany',2),
+('Manuel Neuer','1982-03-10','Netherland',2),
+('Thomas Muller','1983-12-12','France',2),
+('Oscar Bale','1978-05-23','Germany',2),
+('Karim Alves','1988-04-17','Spain',2),
+('Carles Puyol','1989-11-15','Germany',2),
+('Carlos Tevez','1982-05-19','Netherland',2),
+('Mario Gomez','1979-02-21','France',2),
+
+('Ronaldo Cristiano','1983-01-12','Russia',3),
+('Pedro','1988-05-23','Poland',3),
+('Ahan Prakash','1982-12-13','India',3),
+('Bhaskar Roy','1992-08-14','India',3),
+('Mohhamad Nawaz','1993-03-10','India',3),
+('Phurba Lachenpal','1990-04-17','India',3),
+('Amay Ranawade','1988-12-31','India',3),
+('Bhur Simrath','1987-06-14','India',3),
+('Hallen Knowan','1989-10-28','Germany',3),
+('Mandar Desai','1991-05-19','Germany',3),
+('Alberto Mozera','1990-02-21','Russia',3),
+
+('Junior Neymar','1999-01-12','Russia',4),
+('Arrendaom Bhattachar','1992-05-23','India',4),
+('Arron Avoms','1982-05-13','Australia',4),
+('Allex Sagi','1996-08-14','India',4),
+('Gaurav Bhora','1999-08-12','India',4),
+('Joe Zoherliana','1990-01-01','India',4),
+('Emill Benny','1988-02-28','India',4),
+('Joseba Betia','1989-12-24','Spain',4),
+('Roman Phillip','1991-10-14','france',4),
+('Ganni Nigam','1996-06-18','Germany',4),
+('Wilmer Gill','1994-04-22','Colombia',4),
+
+
+('Amrinder Singh','1998-04-22','India',5),
+('Carlos Delgardo','1995-05-20','Spain',5),
+('Narender Galhot','1992-05-13','India',5),
+('Sahil Panwar','1996-02-02','India',5),
+('Soul Crespo','1999-12-23','Spain',5),
+('Aikshuna Tyagy','1993-01-01','India',5),
+('Isak Wallaru','1998-02-27','India',5),
+('Nanadkumar Sekhar','1993-12-21','Spain',5),
+('Aniket Jadhav','1997-10-14','India',5),
+('Jerry Mavium','1999-06-18','Germany',5),
+('Pedrom Artin','1998-04-10','Australia',5);
+
+create table matches 
+(
+  id int primary key auto_increment,
+  tournament_id int,
+  match_date date,
+  team1_id int,
+  team2_id int,
+  stadium_id int,
+  team1_score int,
+  team2_score int,  
+  constraint fk_mtoid foreign key (tournament_id) references tournaments(id),
+  constraint fk_mtid1 foreign key (team1_id) references teams(id),
+  constraint fk_mtid2 foreign key (team2_id) references teams(id),
+  constraint fk_msid foreign key (stadium_id) references stadiums(id)      
+);
+
+
+
+insert into matches (tournament_id,match_date,team1_id,team2_id,stadium_id,team1_score,team2_score) 
+values(1,'2022-03-17',1,2,1,3,2),
+(1,'2022-03-19',3,4,1,2,2),
+(1,'2022-03-21',1,3,2,2,3),
+(1,'2022-03-23',2,4,3,3,0),
+(1,'2022-03-25',3,5,4,3,2),
+(1,'2022-03-27',1,4,5,2,2),
+(1,'2022-03-29',2,3,1,3,1),
+(1,'2022-04-01',1,5,2,0,2),
+(1,'2022-04-03',2,3,3,3,3),
+(1,'2022-04-07',1,2,4,3,2),
+
+(2,'2022-06-17',1,2,1,2,2),
+(2,'2022-06-19',3,4,2,3,2),
+(2,'2022-06-21',1,3,3,3,1),
+(2,'2022-06-23',2,4,4,1,2),
+(2,'2022-06-25',3,5,5,1,3),
+(2,'2022-06-27',1,4,1,3,2),
+(2,'2022-06-29',2,3,2,3,3),
+(2,'2022-07-01',1,5,3,2,2),
+(2,'2022-07-03',2,3,4,1,2),
+(2,'2022-07-07',1,2,5,1,1);
