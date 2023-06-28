@@ -1,0 +1,86 @@
+create table Organizers 
+(
+  organizer_id int primary key,
+  organizer_name varchar(20),
+  organizer_city varchar(20),
+  organizer_email_id varchar(20) unique not null
+);
+
+
+create table Stadiums 
+(
+  stadium_id int primary key,
+  stadium_name varchar(20),
+  city varchar(20),
+  capacity int
+);
+
+create table Tournaments 
+(
+  tournament_id int primary key,
+  tournament_name varchar(255) not null,
+  start_date date,
+  end_date date,
+  location varchar(255),
+  winning_team_id int,
+  organizer_id int,
+  constraint fk_oid foreign key (organizer_id) references organizers(organizer_id)
+);
+
+
+create table Teams 
+(
+  team_id int primary key,
+  team_name varchar(20) unique not null,
+  coach_name varchar(20),
+  country varchar(20),
+  match_id int,
+  score int,
+  tournament_id int,
+  constraint fk_tid foreign key (tournament_id) references tournaments(tournament_id) 
+);
+
+alter table tournaments
+add constraint fk_wid foreign key (winning_team_id) references teams(team_id);
+
+
+create table Players 
+(
+  player_id int primary key,
+  player_name varchar(20),
+  birthdate date,
+  nationality varchar(20),
+  team_id int,
+  constraint fk_ptid foreign key (team_id) references teams(team_id)
+);
+
+
+create table Matches 
+(
+  match_id int primary key,
+  match_date date,
+  team_id int,
+  stadium_id int,
+  tournament_id int,
+  result varchar(20),  
+  winning_team_id int,
+  constraint fk_mtid foreign key (team_id) references teams(team_id),
+  constraint fk_msid foreign key (stadium_id) references stadiums(stadium_id),
+  constraint fk_mtoid foreign key (tournament_id) references tournaments(tournament_id),
+  constraint fk_mwid foreign key (winning_team_id) references teams(team_id)
+);
+
+
+create table Schedule 
+(
+  schedule_id int primary key,
+  tournament_id int,
+  match_id int,
+  date date,
+  time time,
+  venue varchar(20),
+  status varchar(20),
+  constraint fk_stid foreign key(tournament_id) references tournaments(tournament_id),
+  constraint fk_smid foreign key (match_id) references matches(match_id)
+);
+
